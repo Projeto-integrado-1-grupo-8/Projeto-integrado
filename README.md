@@ -1,1 +1,1 @@
-Este é o projeto integrado do grupo 8i
+Este é o projeto integrado do grupo 8
