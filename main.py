@@ -1,7 +1,7 @@
 import os
 
 class Produto:
-    def __init__(self, codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade, lucroDesejadoPorProduto):
+    def __init__(self, codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade):
         self.codigo = codigo
         self.nome = nome
         self.desc = desc
@@ -10,9 +10,7 @@ class Produto:
         self.comissaoVendas = comissaoVendas
         self.impostos = impostos
         self.rentabilidade = rentabilidade
-        self.lucroDesejadoPorProduto = lucroDesejadoPorProduto
-        self.magemLucro = (lucroDesejadoPorProduto/rentabilidade) * 100
-        self.precoVenda = custoProduto/1-((custoAdministrativo + comissaoVendas + impostos + (lucroDesejadoPorProduto/rentabilidade) * 100)/100)
+        self.precoVenda = custoProduto/1-((custoAdministrativo + comissaoVendas + impostos + rentabilidade)/100)
     
 
 def createProduto():
@@ -28,13 +26,12 @@ def createProduto():
             comissaoVendas = float(input("Digite a comissão de venda do produto: "))
             impostos = float(input("Digite o valor dos impostos sobre o produto: "))
             rentabilidade = float(input("Digite a rentabilidade do produto: "))
-            lucroDesejadoPorProduto = float(input("Digite o lucro desejado por unidade: "))
 
-            produto = Produto(codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade, lucroDesejadoPorProduto)
+            produto = Produto(codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade)
 
             os.system("cls")
 
-            print("Codigo: " + produto.codigo + "\nNome: " + produto.nome + "\nDescrição: " + produto.desc + "\nCusto: " + str(produto.custoProduto) + "\nCusto fixo/administrativo: " + str(produto.custoAdministrativo) + "\nComissão de vendas: " + str(produto.comissaoVendas) + "\nImpostos: " + str(produto.impostos) + "\nRentabilidade: " + str(produto.rentabilidade) + "\nMargem lucro: " + str(produto.magemLucro) + "\nPreço de venda: " + str(produto.precoVenda) + "\n\n")
+            print("Codigo: " + produto.codigo + "\nNome: " + produto.nome + "\nDescrição: " + produto.desc + "\nCusto: " + str(produto.custoProduto) + "\nCusto fixo/administrativo: " + str(produto.custoAdministrativo) + "\nComissão de vendas: " + str(produto.comissaoVendas) + "\nImpostos: " + str(produto.impostos) + "\nRentabilidade: " + str(produto.rentabilidade) + "\nPreço de venda: " + str(produto.precoVenda) + "\n\n")
 
             continuar = input("1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
