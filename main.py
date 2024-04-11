@@ -11,6 +11,16 @@ class Produto:
         self.impostos = impostos
         self.rentabilidade = rentabilidade
         self.precoVenda = custoProduto/1-((custoAdministrativo + comissaoVendas + impostos + rentabilidade)/100)
+        if rentabilidade > 20:
+            self.classificacaoRentabilidade = "Alta"
+        if rentabilidade > 10 and rentabilidade <= 20:
+            self.classificacaoRentabilidade = "Lucro médio"
+        if rentabilidade > 0 and rentabilidade <= 10:
+            self.classificacaoRentabilidade = "Lucro baixo"
+        if rentabilidade == 0:
+            self.classificacaoRentabilidade = "Equilibrio"
+        if rentabilidade < 0:
+            self.classificacaoRentabilidaders = "Prejuizo"
     
 
 def createProduto():
@@ -31,7 +41,7 @@ def createProduto():
 
             os.system("cls")
 
-            print("Codigo: " + produto.codigo + "\nNome: " + produto.nome + "\nDescrição: " + produto.desc + "\nCusto: " + str(produto.custoProduto) + "\nCusto fixo/administrativo: " + str(produto.custoAdministrativo) + "\nComissão de vendas: " + str(produto.comissaoVendas) + "\nImpostos: " + str(produto.impostos) + "\nRentabilidade: " + str(produto.rentabilidade) + "\nPreço de venda: " + str(produto.precoVenda) + "\n\n")
+            print("Codigo: " + produto.codigo + "\nNome: " + produto.nome + "\nDescrição: " + produto.desc + "\nCusto: " + str(produto.custoProduto) + "\nCusto fixo/administrativo: " + str(produto.custoAdministrativo) + "\nComissão de vendas: " + str(produto.comissaoVendas) + "\nImpostos: " + str(produto.impostos) + "\nRentabilidade: " + str(produto.rentabilidade) + "\nPreço de venda: " + str(produto.precoVenda) + "\nClassificação do lucro: " + str(produto.classificacaoRentabilidade))
 
             continuar = input("1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
