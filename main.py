@@ -10,7 +10,10 @@ class Produto:
         self.comissaoVendas = comissaoVendas
         self.impostos = impostos
         self.rentabilidade = rentabilidade
-        self.precoVenda = custoProduto/1-((custoAdministrativo + comissaoVendas + impostos + rentabilidade)/100)
+        self.precoVenda = custoProduto/(1-((custoAdministrativo + comissaoVendas + impostos + rentabilidade)/100))
+        self.receitaBruta = self.precoVenda - custoProduto
+        self.outrosCustos = custoAdministrativo + comissaoVendas + impostos
+
         if rentabilidade > 20:
             self.classificacaoRentabilidade = "Alta"
         if rentabilidade > 10 and rentabilidade <= 20:
@@ -20,7 +23,7 @@ class Produto:
         if rentabilidade == 0:
             self.classificacaoRentabilidade = "Equilibrio"
         if rentabilidade < 0:
-            self.classificacaoRentabilidaders = "Prejuizo"
+            self.classificacaoRentabilidade = "Prejuizo"
     
 
 def createProduto():
@@ -41,7 +44,17 @@ def createProduto():
 
             os.system("cls")
 
-            print("Codigo: " + produto.codigo + "\nNome: " + produto.nome + "\nDescrição: " + produto.desc + "\nCusto: " + str(produto.custoProduto) + "\nCusto fixo/administrativo: " + str(produto.custoAdministrativo) + "\nComissão de vendas: " + str(produto.comissaoVendas) + "\nImpostos: " + str(produto.impostos) + "\nRentabilidade: " + str(produto.rentabilidade) + "\nPreço de venda: " + str(produto.precoVenda) + "\nClassificação do lucro: " + str(produto.classificacaoRentabilidade))
+            
+            print("Descrição            |" + " valor  |" + " %")
+            print("Preço de venda  | " + str(produto.precoVenda) + " | 100%")
+            print("Custo do produto    | " + str(produto.custoProduto) + " | " + str(100 * (produto.custoProduto / produto.precoVenda)) + "%")
+            print("Receita Bruta  | " + str(produto.receitaBruta) + " | " + str(100 * (produto.receitaBruta / produto.precoVenda))+ "%")
+            print("Custo Administrativo/Fixo    | " + str(produto.custoAdministrativo) + " | " + str(100 * (produto.custoAdministrativo / produto.precoVenda))+ "%")
+            print("Comissão de vendas    | " + str(produto.comissaoVendas) + " | " + str(100 * (produto.comissaoVendas / produto.precoVenda))+ "%")
+            print("Impostos     | " + str(produto.impostos) + " | " + str(100 * (produto.impostos / produto.precoVenda))+ "%")
+            print("Outros custos   | " + str(produto.outrosCustos) + " | " + str(100 * (produto.outrosCustos / produto.precoVenda))+ "%")
+            print("Rentabilidade     | " + str(produto.receitaBruta - produto.outrosCustos) + " | " + str(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda))+ "%")
+            print("Classificação de lucro  | " + str(produto.classificacaoRentabilidade))
 
             continuar = input("1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
