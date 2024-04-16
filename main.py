@@ -59,18 +59,6 @@ def createProduto():
                 print("|",item[0]," "*(25-len(str(item[0]))),"|",item[1]," "*(25-len(str(item[1]))),"|", item[2]," "*(10-len(str(item[2]))),"|")
             
 
-            
-            # print("Descrição            |" + " valor  |" + " %")
-            # print("Preço de venda  | " + str(produto.precoVenda) + " | 100%")
-            # print("Custo do produto    | " + str(produto.custoProduto) + " | " + str(100 * (produto.custoProduto / produto.precoVenda)) + "%")
-            # print("Receita Bruta  | " + str(produto.receitaBruta) + " | " + str(100 * (produto.receitaBruta / produto.precoVenda))+ "%")
-            # print("Custo Administrativo/Fixo    | " + str(produto.custoAdministrativo) + " | " + str(100 * (produto.custoAdministrativo / produto.precoVenda))+ "%")
-            # print("Comissão de vendas    | " + str(produto.comissaoVendas) + " | " + str(100 * (produto.comissaoVendas / produto.precoVenda))+ "%")
-            # print("Impostos     | " + str(produto.impostos) + " | " + str(100 * (produto.impostos / produto.precoVenda))+ "%")
-            # print("Outros custos   | " + str(produto.outrosCustos) + " | " + str(100 * (produto.outrosCustos / produto.precoVenda))+ "%")
-            # print("Rentabilidade     | " + str(produto.receitaBruta - produto.outrosCustos) + " | " + str(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda))+ "%")
-            # print("Classificação de lucro  | " + str(produto.classificacaoRentabilidade))
-
             continuar = input("\n\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
 
