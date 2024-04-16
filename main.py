@@ -59,7 +59,7 @@ def createProduto():
                 print("|",item[0]," "*(25-len(str(item[0]))),"|",item[1]," "*(25-len(str(item[1]))),"|", item[2]," "*(10-len(str(item[2]))),"|")
             
 
-            continuar = input("\n\n\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
+            continuar = input("\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
 
         except ValueError:
