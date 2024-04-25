@@ -1,4 +1,5 @@
 import os
+import mysql.connector
 
 class Produto:
     def __init__(self, codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade):
@@ -24,7 +25,11 @@ class Produto:
             self.classificacaoRentabilidade = "Equilibrio"
         if rentabilidade < 0:
             self.classificacaoRentabilidade = "Prejuizo"
-    
+
+def createTableOfProdutos(table, sizeFirstcell, sizeMiddlecell, sizeLastcell):
+    table.insert(0, ['Descricao', 'Valor', '%'])
+    for item in table:
+                print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
 
 def createProduto():
     utilizandoCriacaoDeProduto = True
@@ -45,7 +50,7 @@ def createProduto():
             os.system("cls")
 
 
-            table = [['Descricao', 'Valor', '%'], ['Preço de venda', round(produto.precoVenda, 2), '100%'], 
+            table = [['Preço de venda', round(produto.precoVenda, 2), '100%'], 
                     ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
                     ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
                     ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
@@ -55,9 +60,8 @@ def createProduto():
                     ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
                     ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
 
-            for item in table:
-                print("|",item[0]," "*(25-len(str(item[0]))),"|",item[1]," "*(25-len(str(item[1]))),"|", item[2]," "*(10-len(str(item[2]))),"|")
             
+            createTableOfProdutos(table, 25, 25, 10)
 
             continuar = input("\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
@@ -78,7 +82,7 @@ def createProduto():
     
 
 
-def menu():
+def menu(database):
     utilizandoMenu = True
     while utilizandoMenu:
         os.system("cls")
@@ -97,4 +101,9 @@ def menu():
             print("Até Logo!")
 
 
-menu()
+databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="root")
+
+if databaseConnection.is_connected():
+    menu(databaseConnection.cursor())
+else:
+    print("Não foi possivel conectar ao banco de dados\ntente novamente mais tarde...")
