@@ -79,7 +79,8 @@ def createProduto():
     
     
 
-    
+def listProdutos(database):
+    database.execute("select * from produtos")
 
 
 def menu(database):
