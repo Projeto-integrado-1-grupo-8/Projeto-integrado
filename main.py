@@ -1,6 +1,8 @@
 import os
 import mysql.connector
 
+database = False
+
 class Produto:
     def __init__(self, codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade):
         self.codigo = codigo
@@ -79,11 +81,24 @@ def createProduto():
     
     
 
-def listProdutos(database):
-    database.execute("select * from produtos")
+def listProdutos():
+    limiteDeAtualizacao = 5
+    while True:
+        os.system("cls")
+        database.execute("select * from produtos;")
+        list = database.fetchall()
+        print(list)
+        database.reset()
+        if limiteDeAtualizacao == 0: 
+            input("clique em qualquer tecla para voltar ao menu: ")
+            break
+        else:
+            opcao = input("1-Atualizar\nOutros-Voltar ao menu: ")
+            if opcao != "1": break
+            else: limiteDeAtualizacao -= 1
 
 
-def menu(database):
+def menu():
     utilizandoMenu = True
     while utilizandoMenu:
         os.system("cls")
@@ -94,7 +109,7 @@ def menu(database):
         if opcao == "2":
             print("função alterar")
         if opcao == "3":
-            print("função listar")
+            listProdutos()
         if opcao == "4":
             print("função deletar")
         if opcao not in ["1", "2", "3", "4"]:
@@ -105,6 +120,7 @@ def menu(database):
 databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="root")
 
 if databaseConnection.is_connected():
-    menu(databaseConnection.cursor())
+    database = databaseConnection.cursor()
+    menu()
 else:
     print("Não foi possivel conectar ao banco de dados\ntente novamente mais tarde...")
