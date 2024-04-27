@@ -27,8 +27,18 @@ class Produto:
             self.classificacaoRentabilidade = "Equilibrio"
         if rentabilidade < 0:
             self.classificacaoRentabilidade = "Prejuizo"
+    
 
-def createTableOfProdutos(table, sizeFirstcell, sizeMiddlecell, sizeLastcell):
+def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
+    table = [['Preço de venda', round(produto.precoVenda, 2), '100%'], 
+    ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
+    ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
+    ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
+    ['Comissão de vendas', round(produto.comissaoVendas, 2), str(round(100 * (produto.comissaoVendas / produto.precoVenda), 2))+ "%"],
+    ['Imposto', round(produto.impostos, 2), str(round(100 * (produto.impostos / produto.precoVenda), 2))+ "%"],
+    ['Outros custos', round(produto.outrosCustos, 2), str(round(100 * (produto.outrosCustos / produto.precoVenda), 2))+ "%"],
+    ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
+    ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
     table.insert(0, ['Descricao', 'Valor', '%'])
     for item in table:
                 print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
@@ -50,20 +60,8 @@ def createProduto():
             produto = Produto(codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade)
 
             os.system("cls")
-
-
-            table = [['Preço de venda', round(produto.precoVenda, 2), '100%'], 
-                    ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
-                    ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
-                    ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
-                    ['Comissão de vendas', round(produto.comissaoVendas, 2), str(round(100 * (produto.comissaoVendas / produto.precoVenda), 2))+ "%"],
-                    ['Imposto', round(produto.impostos, 2), str(round(100 * (produto.impostos / produto.precoVenda), 2))+ "%"],
-                    ['Outros custos', round(produto.outrosCustos, 2), str(round(100 * (produto.outrosCustos / produto.precoVenda), 2))+ "%"],
-                    ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
-                    ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
-
             
-            createTableOfProdutos(table, 25, 25, 10)
+            createTableOfProdutos(produto, 25, 25, 10)
 
             continuar = input("\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
@@ -87,7 +85,11 @@ def listProdutos():
         os.system("cls")
         database.execute("select * from produtos;")
         list = database.fetchall()
-        print(list)
+        for item in list:
+            produto = Produto(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7])
+            print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
+            print(createTableOfProdutos(produto, 25, 25, 10))
+            print('\n\n\n')
         database.reset()
         if limiteDeAtualizacao == 0: 
             input("clique em qualquer tecla para voltar ao menu: ")
