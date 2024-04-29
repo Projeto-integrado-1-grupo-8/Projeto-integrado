@@ -30,7 +30,9 @@ class Produto:
     
 
 def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
-    table = [['Preço de venda', round(produto.precoVenda, 2), '100%'], 
+    table = [
+    ['Descricao', 'Valor', '%'],
+    ['Preço de venda', round(produto.precoVenda, 2), '100%'], 
     ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
     ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
     ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
@@ -39,7 +41,6 @@ def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
     ['Outros custos', round(produto.outrosCustos, 2), str(round(100 * (produto.outrosCustos / produto.precoVenda), 2))+ "%"],
     ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
     ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
-    table.insert(0, ['Descricao', 'Valor', '%'])
     for item in table:
                 print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
 
@@ -80,9 +81,9 @@ def createProduto():
     
 
 def listProdutos():
-    limiteDeAtualizacao = 5
     while True:
         os.system("cls")
+        databaseConnection.reset_session()
         database.execute("select * from produtos;")
         list = database.fetchall()
         for item in list:
@@ -90,15 +91,9 @@ def listProdutos():
             print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
             print(createTableOfProdutos(produto, 25, 25, 10))
             print('\n\n\n')
-        database.reset()
-        if limiteDeAtualizacao == 0: 
-            input("clique em qualquer tecla para voltar ao menu: ")
-            break
-        else:
-            opcao = input("1-Atualizar\nOutros-Voltar ao menu: ")
-            if opcao != "1": break
-            else: limiteDeAtualizacao -= 1
-
+        
+        input("clique em qualquer tecla para voltar ao menu: ")
+        break
 
 def menu():
     utilizandoMenu = True
