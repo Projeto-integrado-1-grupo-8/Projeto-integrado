@@ -1,4 +1,7 @@
 import os
+import mysql.connector
+
+database = False
 
 class Produto:
     def __init__(self, codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade):
@@ -26,6 +29,21 @@ class Produto:
             self.classificacaoRentabilidade = "Prejuizo"
     
 
+def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
+    table = [
+    ['Descricao', 'Valor', '%'],
+    ['Preço de venda', round(produto.precoVenda, 2), '100%'], 
+    ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
+    ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
+    ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
+    ['Comissão de vendas', round(produto.comissaoVendas, 2), str(round(100 * (produto.comissaoVendas / produto.precoVenda), 2))+ "%"],
+    ['Imposto', round(produto.impostos, 2), str(round(100 * (produto.impostos / produto.precoVenda), 2))+ "%"],
+    ['Outros custos', round(produto.outrosCustos, 2), str(round(100 * (produto.outrosCustos / produto.precoVenda), 2))+ "%"],
+    ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
+    ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
+    for item in table:
+                print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
+
 def createProduto():
     utilizandoCriacaoDeProduto = True
     os.system("cls")
@@ -43,23 +61,10 @@ def createProduto():
             produto = Produto(codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade)
 
             os.system("cls")
-
-
-            table = [['Descricao', 'Valor', '%'], ['Preço de venda', round(produto.precoVenda, 2), '100%'], 
-                    ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
-                    ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
-                    ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
-                    ['Comissão de vendas', round(produto.comissaoVendas, 2), str(round(100 * (produto.comissaoVendas / produto.precoVenda), 2))+ "%"],
-                    ['Imposto', round(produto.impostos, 2), str(round(100 * (produto.impostos / produto.precoVenda), 2))+ "%"],
-                    ['Outros custos', round(produto.outrosCustos, 2), str(round(100 * (produto.outrosCustos / produto.precoVenda), 2))+ "%"],
-                    ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
-                    ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
-
-            for item in table:
-                print("|",item[0]," "*(25-len(str(item[0]))),"|",item[1]," "*(25-len(str(item[1]))),"|", item[2]," "*(10-len(str(item[2]))),"|")
             
+            createTableOfProdutos(produto, 25, 25, 10)
 
-            continuar = input("\n\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
+            continuar = input("\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
 
         except ValueError:
@@ -75,8 +80,20 @@ def createProduto():
     
     
 
-    
-
+def listProdutos():
+    while True:
+        os.system("cls")
+        databaseConnection.reset_session()
+        database.execute("select * from produtos;")
+        list = database.fetchall()
+        for item in list:
+            produto = Produto(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7])
+            print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
+            print(createTableOfProdutos(produto, 25, 25, 10))
+            print('\n\n\n')
+        
+        input("clique em qualquer tecla para voltar ao menu: ")
+        break
 
 def menu():
     utilizandoMenu = True
@@ -89,7 +106,7 @@ def menu():
         if opcao == "2":
             print("função alterar")
         if opcao == "3":
-            print("função listar")
+            listProdutos()
         if opcao == "4":
             print("função deletar")
         if opcao not in ["1", "2", "3", "4"]:
@@ -97,4 +114,10 @@ def menu():
             print("Até Logo!")
 
 
-menu()
+databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="root")
+
+if databaseConnection.is_connected():
+    database = databaseConnection.cursor()
+    menu()
+else:
+    print("Não foi possivel conectar ao banco de dados\ntente novamente mais tarde...")
