@@ -81,19 +81,17 @@ def createProduto():
     
 
 def listProdutos():
-    while True:
-        os.system("cls")
-        databaseConnection.reset_session()
-        database.execute("select * from produtos;")
-        list = database.fetchall()
-        for item in list:
-            produto = Produto(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7])
-            print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
-            print(createTableOfProdutos(produto, 25, 25, 10))
-            print('\n\n\n')
-        
-        input("clique em qualquer tecla para voltar ao menu: ")
-        break
+    os.system("cls")
+    databaseConnection.reset_session()
+    database.execute("select * from produtos;")
+    list = database.fetchall()
+    for item in list:
+        produto = Produto(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7])
+        print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
+        print(createTableOfProdutos(produto, 25, 25, 10))
+        print('\n\n\n')
+    
+    input("clique em qualquer tecla para voltar ao menu: ")
 
 def menu():
     utilizandoMenu = True
