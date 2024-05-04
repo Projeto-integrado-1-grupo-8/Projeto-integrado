@@ -42,7 +42,7 @@ def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
     ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
     ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
     for item in table:
-                print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
+        print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
 
 def createProduto():
     utilizandoCriacaoDeProduto = True
@@ -88,7 +88,7 @@ def listProdutos():
     for item in list:
         produto = Produto(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7])
         print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
-        print(createTableOfProdutos(produto, 25, 25, 10))
+        createTableOfProdutos(produto, 25, 25, 10)
         print('\n\n\n')
     
     input("clique em qualquer tecla para voltar ao menu: ")
