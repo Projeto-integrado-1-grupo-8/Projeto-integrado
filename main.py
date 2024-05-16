@@ -35,11 +35,11 @@ def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
     ['Preço de venda', round(produto.precoVenda, 2), '100%'], 
     ['Custo de aquisição', round(produto.custoProduto, 2), str(round(100 * (produto.custoProduto / produto.precoVenda), 2))+ "%" ], 
     ['Receita bruta', round(produto.receitaBruta, 2), str(round(100 * (produto.receitaBruta / produto.precoVenda), 2))+ "%"], 
-    ['Custo fixo/administrativo', round(produto.custoAdministrativo, 2), str(round(100 * (produto.custoAdministrativo / produto.precoVenda), 2))+ "%"],
-    ['Comissão de vendas', round(produto.comissaoVendas, 2), str(round(100 * (produto.comissaoVendas / produto.precoVenda), 2))+ "%"],
-    ['Imposto', round(produto.impostos, 2), str(round(100 * (produto.impostos / produto.precoVenda), 2))+ "%"],
-    ['Outros custos', round(produto.outrosCustos, 2), str(round(100 * (produto.outrosCustos / produto.precoVenda), 2))+ "%"],
-    ['Rentabilidade', round(produto.receitaBruta - produto.outrosCustos,2), str(round(100 * ((produto.receitaBruta - produto.outrosCustos) / produto.precoVenda), 2))+ "%"],
+    ['Custo fixo/administrativo', round(produto.precoVenda*(produto.custoAdministrativo/100), 2), str(produto.custoAdministrativo)+ "%"],
+    ['Comissão de vendas', round(produto.precoVenda * (produto.comissaoVendas/100), 2), str(produto.comissaoVendas)+ "%"],
+    ['Imposto', round(produto.precoVenda*(produto.impostos/100), 2), str(produto.impostos)+ "%"],
+    ['Outros custos', round(produto.precoVenda*(produto.outrosCustos/100), 2), str(produto.outrosCustos)+ "%"],
+    ['Rentabilidade', round(produto.precoVenda * (produto.rentabilidade/100)), str(round(produto.rentabilidade))+ "%"],
     ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
     for item in table:
         print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
@@ -59,7 +59,7 @@ def createProduto():
             rentabilidade = float(input("Digite a rentabilidade do produto: "))
 
             produto = Produto(codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade)
-
+            # database.execute("insert into produtos values(" + str(produto.codigo) + "," + str(produto.nome) + "," + str(produto.desc) + "," + str(produto.custoProduto) + "," + str(produto.custoAdministrativo) + "," + str(produto.comissaoVendas) + "," + str(produto.impostos) + "," + str(produto.rentabilidade) + ");")
             os.system("cls")
             
             createTableOfProdutos(produto, 25, 25, 10)
