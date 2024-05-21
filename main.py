@@ -39,7 +39,7 @@ def createTableOfProdutos(produto, sizeFirstcell, sizeMiddlecell, sizeLastcell):
     ['Comissão de vendas', round(produto.precoVenda * (produto.comissaoVendas/100), 2), str(produto.comissaoVendas)+ "%"],
     ['Imposto', round(produto.precoVenda*(produto.impostos/100), 2), str(produto.impostos)+ "%"],
     ['Outros custos', round(produto.precoVenda*(produto.outrosCustos/100), 2), str(produto.outrosCustos)+ "%"],
-    ['Rentabilidade', round(produto.precoVenda * (produto.rentabilidade/100)), str(round(produto.rentabilidade))+ "%"],
+    ['Rentabilidade', round(produto.precoVenda * (produto.rentabilidade/100), 2), str(round(produto.rentabilidade))+ "%"],
     ['Classificação de lucro', produto.classificacaoRentabilidade, '']]
     for item in table:
         print("|",item[0]," "*(sizeFirstcell-len(str(item[0]))),"|",item[1]," "*(sizeMiddlecell-len(str(item[1]))),"|", item[2]," "*(sizeLastcell-len(str(item[2]))),"|")
@@ -57,9 +57,19 @@ def createProduto():
             comissaoVendas = float(input("Digite a comissão de venda do produto: "))
             impostos = float(input("Digite o valor dos impostos sobre o produto: "))
             rentabilidade = float(input("Digite a rentabilidade do produto: "))
-
             produto = Produto(codigo, nome, desc, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade)
-            # database.execute("insert into produtos values(" + str(produto.codigo) + "," + str(produto.nome) + "," + str(produto.desc) + "," + str(produto.custoProduto) + "," + str(produto.custoAdministrativo) + "," + str(produto.comissaoVendas) + "," + str(produto.impostos) + "," + str(produto.rentabilidade) + ");")
+            dadosParaInsert = (
+                produto.codigo,
+                produto.nome,
+                produto.desc,
+                produto.custoProduto,
+                produto.custoAdministrativo,
+                produto.comissaoVendas,
+                produto.impostos,
+                produto.rentabilidade,
+            )
+            database.execute("INSERT INTO produtos (codigo, nome, descricao, custoProduto, custoAdministrativo, comissaoVendas, impostos, rentabilidade) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", dadosParaInsert)
+            databaseConnection.commit()
             os.system("cls")
             
             createTableOfProdutos(produto, 25, 25, 10)
@@ -67,14 +77,14 @@ def createProduto():
             continuar = input("\n\n1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
 
-        except ValueError:
+        except ValueError:  
             os.system("cls")
             print("O valor deve ser um número")
             tentarNovamente = input("1-Tentar novamente\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = tentarNovamente == "1"
 
-        except:
-            print("Algo deu errado...")
+        except Exception as e:
+            print("Algo deu errado...\nErro: " + str(e))
             continuar = input("1-continuar\nOutros-Voltar ao menu\n\nDigite a sua escolha: ")
             utilizandoCriacaoDeProduto = continuar == "1"
     
