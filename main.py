@@ -49,8 +49,13 @@ def createProduto():
     os.system("cls")
     while utilizandoCriacaoDeProduto:
         try:
-            codigo = input("Digite o codigo do produto: ")
-            nome = input("Digite o nome do produto: ")
+            while True:
+                codigo = input("Digite o codigo do produto: ")
+                nome = input("Digite o nome do produto: ")
+                database.execute("select * from produtos where nome=%s OR codigo=%s", (nome, codigo))
+                produtoExiste = database.fetchone()
+                if produtoExiste == None: break
+                else: print("Este nome ou código já existe!\nTente outro...")
             desc = input("Digite a descrição do produto: ")
             custoProduto = float(input("Digite o custo do produto: "))
             custoAdministrativo = float(input("Digite o custo fixo/administrativo do produto: "))
