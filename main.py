@@ -108,6 +108,24 @@ def listProdutos():
     
     input("clique em qualquer tecla para voltar ao menu: ")
 
+def excluirProduto():
+    os.system("cls")
+    databaseConnection.reset_session()
+    while True:
+        nomeProduto = input("Digite o nome do produto que você deseja excluir: ")
+        database.execute("select * from produtos where nome = %s", (nomeProduto,))
+        results = database.fetchone()
+        if results != None: break
+        else: 
+            print("parece que o produto não existe\n\n\n\n\n")
+            retornarMenu = input("Deseja voltar ao menu?\n1-não\nqualquer outro botão-sim\n")
+            if retornarMenu != "1": return
+    corfirmacao = input("tem certeza que deseja deletar este produto?\n1-sim\nqualquer outro botão-não\n")
+    if corfirmacao != "1": return
+    database.execute("delete from produtos where nome = %s", (nomeProduto,))
+    databaseConnection.commit()
+    input("Produto deletado com sucesso\nclique em qualquer botão para retornar ao menu\n")
+
 def menu():
     utilizandoMenu = True
     while utilizandoMenu:
@@ -121,7 +139,7 @@ def menu():
         if opcao == "3":
             listProdutos()
         if opcao == "4":
-            print("função deletar")
+            excluirProduto()
         if opcao not in ["1", "2", "3", "4"]:
             utilizandoMenu = False
             print("Até Logo!")
