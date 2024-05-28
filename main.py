@@ -102,11 +102,11 @@ def menu():
         if opcao == "1":
             createProduto()
         if opcao == "2":
-            print("função alterar")
+            input("Trabalhando em função alterar")
         if opcao == "3":
             listProdutos()
         if opcao == "4":
-            print("função deletar")
+            input("Trabalhando na função deletar")
         if opcao not in ["1", "2", "3", "4"]:
             utilizandoMenu = False
             print("Até Logo!")
