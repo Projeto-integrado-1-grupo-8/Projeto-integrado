@@ -139,7 +139,7 @@ def menu():
         if opcao == "3":
             listProdutos()
         if opcao == "4":
-            print("Função deletar")
+            excluirProduto()
         if opcao == "5":
             utilizandoMenu = False
             print("Até logo!")    
