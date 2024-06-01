@@ -126,6 +126,21 @@ def excluirProduto():
     databaseConnection.commit()
     input("Produto deletado com sucesso\nclique em qualquer botão para retornar ao menu\n")
 
+def editarProduto():
+    os.system("cls")
+    databaseConnection.reset_session()
+    while True:
+        while True:
+            nomeProduto = input("Digite o nome do produto que você deseja alterar: ")
+            database.execute("select * from produtos where nome = %s", (nomeProduto,))
+            results = database.fetchone()
+            if results != None: break
+            else: 
+                print("parece que o produto não existe\n\n\n\n\n")
+                retornarMenu = input("Deseja voltar ao menu?\n1-não\nqualquer outro botão-sim\n")
+                if retornarMenu != "1": return
+        
+
 def menu():
     utilizandoMenu = True
     while utilizandoMenu:
