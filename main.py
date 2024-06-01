@@ -145,22 +145,24 @@ def menu():
     utilizandoMenu = True
     while utilizandoMenu:
         os.system("cls")
-        print("Bem-vindo ao projeto de cadastro de produto!!!")
-        opcao = input(("1-Cadastrar produto\n2-Alterar produto\n3-Listar produto\n4-Deletar produto\nOutros-Sair do sistema\n\nDigite a opção escolhida: "))
+        print("--- Bem-vindo(a) ao projeto de cadastro de produto ---")
+        opcao = input(("1-Cadastrar produto\n2-Alterar produto\n3-Listar produto\n4-Deletar produto\n5-Sair do sistema\n\nDigite a opção escolhida: "))
         if opcao == "1":
             createProduto()
         if opcao == "2":
-            print("função alterar")
+            input("Trabalhando em função alterar")
         if opcao == "3":
             listProdutos()
         if opcao == "4":
             excluirProduto()
-        if opcao not in ["1", "2", "3", "4"]:
+        if opcao == "5":
             utilizandoMenu = False
-            print("Até Logo!")
+            print("Até logo!")    
+        if opcao not in ["1", "2", "3", "4", "5"]:
+            input("Use as opções de 1 a 5!")    
 
 
-databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="root")
+databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="281102")
 
 if databaseConnection.is_connected():
     database = databaseConnection.cursor()
