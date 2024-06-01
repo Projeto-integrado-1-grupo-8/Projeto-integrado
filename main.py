@@ -113,9 +113,9 @@ def excluirProduto():
     databaseConnection.reset_session()
     while True:
         nomeProduto = input("Digite o nome do produto que você deseja excluir: ")
-        database.execute("select * from produtos where nome = %s", (nomeProduto,))
-        results = database.fetchone()
-        if results != None: break
+        database.execute("select * from produtos where nome = %s limit 1", (nomeProduto,))
+        results = database.fetchall()
+        if not len(results) == 0: break
         else: 
             print("parece que o produto não existe\n\n\n\n\n")
             retornarMenu = input("Deseja voltar ao menu?\n1-não\nqualquer outro botão-sim\n")
@@ -162,7 +162,7 @@ def menu():
             input("Use as opções de 1 a 5!")    
 
 
-databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="281102")
+databaseConnection = mysql.connector.connect(host="127.0.0.1", database="projetoIntegrado", user="root", password="root")
 
 if databaseConnection.is_connected():
     database = databaseConnection.cursor()
