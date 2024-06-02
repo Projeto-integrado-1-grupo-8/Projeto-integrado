@@ -127,18 +127,42 @@ def excluirProduto():
     input("Produto deletado com sucesso\nclique em qualquer botão para retornar ao menu\n")
 
 def editarProduto():
-    os.system("cls")
-    databaseConnection.reset_session()
     while True:
-        while True:
-            nomeProduto = input("Digite o nome do produto que você deseja alterar: ")
-            database.execute("select * from produtos where nome = %s", (nomeProduto,))
-            results = database.fetchone()
-            if results != None: break
-            else: 
-                print("parece que o produto não existe\n\n\n\n\n")
-                retornarMenu = input("Deseja voltar ao menu?\n1-não\nqualquer outro botão-sim\n")
-                if retornarMenu != "1": return
+        try:
+            os.system("cls")
+            databaseConnection.reset_session()
+            while True:
+                nomeProduto = input("Digite o nome do produto que você deseja alterar: ")
+                database.execute("select * from produtos where nome = %s limit 1", (nomeProduto,))
+                results = database.fetchall() 
+                if not len(results) == 0: break
+                else: 
+                    print("parece que o produto não existe\n\n\n\n\n")
+                    retornarMenu = input("Deseja voltar ao menu?\n1-não\nqualquer outro botão-sim\n")
+                    if retornarMenu != "1": return
+            while True:
+                novoNome=input("Digite o novo nome ou nada caso queira manter o nome de '" + str(results[0][1]) + "':\n")
+                database.execute("select * from produtos where nome = %s limit 1", (novoNome,))
+                verificandoNovoNome = database.fetchall() 
+                if len(verificandoNovoNome) == 0: break
+                else: 
+                    print("parece que o produto '"+ str(novoNome) +"' já existe\n\n")
+            novaDescricao=input("Digite a nova descrição ou nada caso queira manter a descrição de '" + str(results[0][2]) + "':\n")
+            novoCustoDoProduto=input("Digite o novo custo do produto ou nada caso queira manter o custo do produto em '" + str(results[0][3]) + "':\n")
+            novoCustoAdministrativo=input("Digite o novo custo administrativo/fixo ou nada caso queira manter o custo administrativo/fixo em '" + str(results[0][4]) + "`%':\n")
+            novaComissao=input("Digite o nova comissão de vendas ou nada caso queira manter a comissão de vendas  em '" + str(results[0][5]) + "%':\n")
+            novoImposto=input("Digite o novo imposto ou nada caso queira manter o imposto em '" + str(results[0][6]) + "%':\n")
+            novaRentabilidade=input("Digite o nova rentabilidade ou nada caso queira manter a rentabilidade em '" + str(results[0][7]) + "%':\n")
+            database.execute("update produtos set nome = %s, descricao = %s, custoProduto = %s, custoAdministrativo = %s, comissaoVendas = %s, impostos = %s, rentabilidade = %s", (results[0][1] if novoNome == '' else novoNome, results[0][2] if novaDescricao == '' else novaDescricao, results[0][3] if novoCustoDoProduto == '' else novoCustoDoProduto, results[0][4] if novoCustoAdministrativo == '' else novoCustoAdministrativo, results[0][5] if novaComissao=='' else novaComissao, results[0][6] if novoImposto=='' else novoImposto, results[0][7] if novaRentabilidade == '' else novaRentabilidade))
+            databaseConnection.commit()
+            input("Produto alterado com sucesso\nAperte qualquer tecla para continuar")
+            break
+
+        except ValueError:
+            input("Os valores devem ser números\nexceto: nome e descrição\naperte quaquer tecla para tentar de novo\n")
+        except:
+            input("Algo deu errado\naperte enter para tentar novamente")
+            
         
 
 def menu():
@@ -150,7 +174,7 @@ def menu():
         if opcao == "1":
             createProduto()
         if opcao == "2":
-            input("Trabalhando em função alterar")
+            editarProduto()
         if opcao == "3":
             listProdutos()
         if opcao == "4":
