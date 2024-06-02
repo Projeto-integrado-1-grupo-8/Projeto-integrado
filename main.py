@@ -50,7 +50,7 @@ def createProduto():
     while utilizandoCriacaoDeProduto:
         try:
             while True:
-                codigo = input("Digite o codigo do produto: ")
+                codigo = int(input("Digite o codigo do produto: "))
                 nome = input("Digite o nome do produto: ")
                 database.execute("select * from produtos where nome=%s OR codigo=%s", (nome, codigo))
                 produtoExiste = database.fetchone()
@@ -100,6 +100,7 @@ def listProdutos():
     databaseConnection.reset_session()
     database.execute("select * from produtos;")
     list = database.fetchall()
+    if len(list) == 0: print("Nenhum produto cadastrado...\n")
     for item in list:
         produto = Produto(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7])
         print(str(produto.codigo) + " - " + produto.nome + " - " + produto.desc)
